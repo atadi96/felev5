@@ -11,6 +11,7 @@ postulate
   X Y Z : Set -- propositional variables
   
   ⊥ : Set
+  abort : (C : Set) → ⊥ → C
   
   ⊤ : Set
   tt : ⊤
