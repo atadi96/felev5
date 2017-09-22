@@ -1,12 +1,25 @@
-# Számítógépes Hálózatokok
+# Számítógépes Hálózatok
 
 kezdés: 8:25
 
-[Oktató honlapja](http://people.inf.elte.hu/vzoli)
+[Gyakorlatvezető honlapja honlapja](http://people.inf.elte.hu/vzoli)
 
-email: inf-es
+## Határidők
 
-Python-t otthon meg kell tanulni!
+## Előadás
 
-A gyak1 pdf végén lévő feladatokat el kell küldeni emailben!
+Időpont: Hétfő, ???-???
+Helyszín: ???
+Oktató: ???
 
+##Gyakorlat
+
+Időpont: Péntek, 08:25-09:55
+Helyszín: DT 00-412
+Oktató: dr. Vincellér Zoltán
+Email: inf-es
+
+## Linkek
+
+[Gyakorlati anyag honlapja](http://ggombos.web.elte.hu/oktatas/SzamHalo/)
+[Gyakorlati számonkérés felület](https://oktnb16.inf.elte.hu)
