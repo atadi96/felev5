@@ -73,13 +73,13 @@ l10 : X → ¬ ¬ X
 l10 = λ x → λ f → f x
 
 l11 : ¬ ¬ (¬ ¬ X → X)
-l11 = λ a -> a ( λ b → abort X (b (λ x → b {!!})) ) 
+l11 = λ f → f λ g → abort X (g λ x → f λ h → x)
 
 l12 : ¬ ¬ ¬ X → ¬ X
-l12 = {!!}
+l12 = λ f → λ x → f λ g → g x
 
 l13 : ¬ X → ¬ ¬ ¬ X
-l13 = {!!}
+l13 = λ f → λ g → g f
 
 ------------------------------------------------------------------------------
 -- And
@@ -135,7 +135,7 @@ l20 : X ↔ X ∨ ⊥
 l20 = (λ x → inj₁ x) , (λ xb → case X l1 (abort X) xb)
 
 l23 : (Y ∨ X) ↔ (X ∨ Y)
-l23 = {!!}
+l23 = (λ w → case (X ∨ Y) λ y → inj₂ y λ x → inj₁ x w) , λ w → case (Y ∨ X) λ x → inj₂ x λ y → inj₁ y w
 
 l24 : (X ∨ Y) → Z → (X → Z) ∧ (Y → Z)
 l24 = {!!}
