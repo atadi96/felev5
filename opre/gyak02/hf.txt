@@ -1,0 +1,1 @@
+﻿írjunk str_replace-t
