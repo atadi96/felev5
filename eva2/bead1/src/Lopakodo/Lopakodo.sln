@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lopakodo", "Lopakodo.csproj", "{A99B384D-6BF4-4650-AB0A-CF0EB60ECDD3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lopakodo.Mechanics", "..\Lopakodo.Mechanics\Lopakodo.Mechanics.csproj", "{E65E36D9-1292-4936-9436-C9CCC9C06C55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RipSeiko.Geometry", "..\RipSeiko.Geometry\RipSeiko.Geometry.csproj", "{310CE35C-03E7-4380-85A0-FF998B977975}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RipSeiko.Geometry.Tests", "..\RipSeiko.Geometry.Tests\RipSeiko.Geometry.Tests.csproj", "{3FB97E7F-3CFD-4356-92AD-53383EC49500}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A99B384D-6BF4-4650-AB0A-CF0EB60ECDD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A99B384D-6BF4-4650-AB0A-CF0EB60ECDD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A99B384D-6BF4-4650-AB0A-CF0EB60ECDD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A99B384D-6BF4-4650-AB0A-CF0EB60ECDD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E65E36D9-1292-4936-9436-C9CCC9C06C55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E65E36D9-1292-4936-9436-C9CCC9C06C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E65E36D9-1292-4936-9436-C9CCC9C06C55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E65E36D9-1292-4936-9436-C9CCC9C06C55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{310CE35C-03E7-4380-85A0-FF998B977975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{310CE35C-03E7-4380-85A0-FF998B977975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{310CE35C-03E7-4380-85A0-FF998B977975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{310CE35C-03E7-4380-85A0-FF998B977975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FB97E7F-3CFD-4356-92AD-53383EC49500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FB97E7F-3CFD-4356-92AD-53383EC49500}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FB97E7F-3CFD-4356-92AD-53383EC49500}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FB97E7F-3CFD-4356-92AD-53383EC49500}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
