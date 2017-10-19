@@ -22,6 +22,8 @@ namespace RipSeiko.Geometry
 
         public Point(Vector2 v) : this(v.X, v.Y) { }
 
+        public static explicit operator PointF(Point p) => new PointF(p.X, p.Y);
+
         public static bool operator ==(Point p1, Point p2) => p1.X == p2.X && p1.Y == p2.Y;
 
         public static bool operator !=(Point p1, Point p2) => !(p1 == p2);
@@ -78,6 +80,10 @@ namespace RipSeiko.Geometry
         public PointF(PointF p) : this(p.X, p.Y) { }
 
         public PointF(Vector2F v) : this(v.X, v.Y) { }
+
+        public static explicit operator Point(PointF pf) => new Point((int)pf.X, (int)pf.Y);
+
+        public static explicit operator Vector2F(PointF pf) => new Vector2F(pf.X, pf.Y);
 
         public static PointF operator +(PointF p, Vector2F v) => new PointF(p.X + v.X, p.Y + v.Y);
 

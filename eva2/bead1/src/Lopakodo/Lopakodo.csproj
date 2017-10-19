@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TxtFolderMapRepository.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -80,6 +81,10 @@
     <ProjectReference Include="..\Lopakodo.Mechanics\Lopakodo.Mechanics.csproj">
       <Project>{e65e36d9-1292-4936-9436-c9ccc9c06c55}</Project>
       <Name>Lopakodo.Mechanics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RipSeiko.Geometry\RipSeiko.Geometry.csproj">
+      <Project>{310ce35c-03e7-4380-85a0-ff998b977975}</Project>
+      <Name>RipSeiko.Geometry</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

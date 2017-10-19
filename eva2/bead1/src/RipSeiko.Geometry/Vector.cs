@@ -31,6 +31,10 @@ namespace RipSeiko.Geometry
             }
         }
 
+        public static explicit operator Vector2F(Vector2 v) => new Vector2F(v.X, v.Y);
+
+        public static explicit operator Vector2(Vector2F v) => new Vector2((int)v.X, (int)v.Y);
+
         public static Vector2 operator +(Vector2 a, Vector2 b) => new Vector2(a.X + b.X, a.Y + b.Y);
 
         public static Vector2 operator -(Vector2 a) => new Vector2(-a.X, -a.Y);
@@ -44,6 +48,12 @@ namespace RipSeiko.Geometry
         public int Dot(Vector2 a) => X * a.X + Y * a.Y;
 
         public Vector2F Normalized => new Vector2F(X, Y).Normalized;
+
+        public static Vector2 Zero => new Vector2(0, 0);
+
+        public static Vector2 AxisX => new Vector2(1, 0);
+
+        public static Vector2 AxisY => new Vector2(0, 1);
 
         public override string ToString() => "(" + X + "," + Y + ")";
 

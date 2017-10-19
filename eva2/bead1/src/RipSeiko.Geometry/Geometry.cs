@@ -65,22 +65,6 @@ namespace RipSeiko.Geometry
             return Math.Sign(x2.CompareTo(p.Y));
         }
 
-        /*
-         * int value = (y2' - x2') * x1' + (x2  - x2') * (y1' - x1') * (y1 - x1) - (y2 - x2) * x1
-         * int denominator = (y2 - x2) * (y1' - x1') - (y1 - x1) * (y2' - x2')
-         *
-         * lambda1 == lambda2 = (y2 - x2) * (y1' - x1') == (y2 - x2) * (y1' - x1')
-         * 
-         */
-
-        /*
-         * int value = (l2.P2.Y - l2.P1.Y) * l2.P1.X + (l1.P1.Y  - l2.P1.Y) * (l2.P2.X - l2.P1.X) * (l1.P2.X - l1.P1.X) - (l1.P2.Y - l1.P1.Y) * l1.P1.X
-         * int denominator = (l1.P2.Y - l1.P1.Y) * (l2.P2.X - l2.P1.X) - (l1.P2.X - l1.P1.X) * (l2.P2.Y - l2.P1.Y)
-         *
-         * lambda1 == lambda2 = (l1.P2.Y - l1.P1.Y) * (l2.P2.X - l2.P1.X) == (l1.P2.Y - l1.P1.Y) * (l2.P2.X - l2.P1.X)
-         * 
-         */
-
         public static int Orientation(PointF p1, PointF p2, PointF p3)
         {
             //See http://www.geeksforgeeks.org/orientation-3-ordered-points/
@@ -155,91 +139,27 @@ namespace RipSeiko.Geometry
                 }
             }
         }
-        /*
-        public static IntersectionType Intersec2t(Line l1, Line l2)
-        {
-            Point x1 = l1.P1;
-            Point y1 = l1.P2;
-            Point x2 = l2.P1;
-            Point y2 = l2.P2;
-            int denominator =
-                (l1.P2.Y - l1.P1.Y) * (l2.P2.X - l2.P1.X)
-                - (l1.P2.X - l1.P1.X) * (l2.P2.Y - l2.P1.Y);
-            int value =
-                (l2.P2.Y - l2.P1.Y) * l2.P1.X
-                + (l1.P1.Y - l2.P1.Y) * (l2.P2.X - l2.P1.X) * (l1.P2.X - l1.P1.X)
-                - (l1.P2.Y - l1.P1.Y) * l1.P1.X;
-            value *= -1;
-            if (Paralell(l1, l2)) //megegyezik a meredekség
-            {
-                if (value == 0) //ugyanolyan magasan vannak
-                {
-                    Rectangle rect = new Rectangle(l1.P1, l1.P2);
-                    if(rect.InBounds(l2.P1) || rect.InBounds(l2.P2)) //előző feltételekkel együtt elég ahhoz, hogy összeérjenek
-                    {
-                        return IntersectionType.Infinite;
-                    }
-                    else
-                    {
-                        return IntersectionType.None;
-                    }
-                }
-                else
-                {
-                    return IntersectionType.None;
-                }
-            }
-            else
-            {
-                if (
-                    (
-                        (l1.P1.X * denominator <= value && value <= l1.P2.X * denominator)
-                        || (l1.P1.X * denominator >= value && value >= l1.P2.X * denominator)
-                    ) && (
-                        (l2.P1.X * denominator <= value && value <= l2.P2.X * denominator)
-                        || (l2.P1.X * denominator >= value && value >= l2.P2.X * denominator)
-                    )
-                )
-                {
-                    return IntersectionType.Improper;
-                }
-                else
-                {
-                    return IntersectionType.None;
-                }
-            }
-        }
 
-        public static bool Intersect(Rectangle r, Line l)
+        public static bool Intersect(RectangleF r, LineF l)
         {
             if (r.InBounds(l.P1) || r.InBounds(l.P2))
             {
                 return true;
             }
 
-            Line side1 = new Line(r.BottomLeft, r.BottomRight);
-            Line side2 = new Line(r.BottomRight, r.TopRight);
-            Line side3 = new Line(r.BottomLeft, r.TopLeft);
-            Line side4 = new Line(r.TopLeft, r.TopRight);
+            LineF side1 = new LineF(r.BottomLeft, r.BottomRight);
+            LineF side2 = new LineF(r.BottomRight, r.TopRight);
+            LineF side3 = new LineF(r.BottomLeft, r.TopLeft);
+            LineF side4 = new LineF(r.TopLeft, r.TopRight);
 
             var what =
                 (new[] { side1, side2, side3, side4 })
                 .Select(side => Tuple.Create(Intersect(side, l), side))
-                .Where(t => t.Item1 != IntersectionType.None)
+                .Where(t => t.Item1 == IntersectionType.Proper)
                 .ToArray();
-            switch (what.Length)
-            {
-                case 0:
-                    return false;
-                case 1:
-                    return
-                        what[0].Item2.P1 != l.P1 &&
-                        what[0].Item2.P1 != l.P2 &&
-                        what[0].Item2.P2 != l.P1 &&
-                        what[0].Item2.P2 != l.P2;
-                default:
-                    return true;
-            }
-        }*/
+            return what.Length >= 2;
+        }
+
+        public static bool Intersect(LineF l, RectangleF r) => Intersect(r, l);
     }
 }

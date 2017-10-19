@@ -48,7 +48,7 @@ namespace RipSeiko.Geometry
         public bool InBounds(Point p) => BottomLeft.X <= p.X && BottomLeft.Y <= p.Y && p.X <= TopRight.X && p.Y <= TopRight.Y;
     }
 
-    public class RectangleF
+    public struct RectangleF
     {
         public PointF BottomLeft { get; private set; }
 
