@@ -18,70 +18,62 @@ outputs = []
 
 # --- TODO: toltsd ki a dictonaryt, ami tarolni fogja a chipkodokat
 # --- TODO: hozz letre egy valtozot, ami tarolni fogja az aktualis uzenetet, pl zaj
-chipcodes = {}
+chipcodes = {
+    "A": [1, 1, 1, 1],
+    "B": [1, -1, 1, -1],
+    "C": [1, 1, -1, -1],
+    "D": [1, -1, -1, 1]
+}
 
 while inputs:
-	timeout = 1
-	readable, writeable, exceptional = select.select(inputs, outputs, inputs, timeout)
-	
-	if not (readable or writeable or exceptional):
-		continue
-	
-	for s in readable:
-		if s is server:
-			client, client_address = s.accept()
-			client.setblocking(1)
-			name = client.recv(20)
-			print "new connection from ", client_address,"with azon", name
+    timeout = 1
+    readable, writeable, exceptional = select.select(inputs, outputs, inputs, timeout)
+    
+    if not (readable or writeable or exceptional):
+        continue
+    
+    for s in readable:
+        if s is server:
+            client, client_address = s.accept()
+            client.setblocking(1)
+            name = client.recv(20)
+            print "new connection from ", client_address,"with azon", name
 
-			# --- TODO: Modositsd az alabbi kodot, hogy a kliens uzenete alapjan valszold meg neki a chipkodjat
-			# --- TODO: pl: kliens elkuldte A kuld vissza neki hogy 1111
-			
-			inputs.append(client)
-			outputs.append(client)
-		elif not sys.stdin.isatty():
-		# elif s == sys.stdin
-			print "Close the system"
-			inputs.remove(server)
-			for c in inputs:
-				inputs.remove(c)
-				c.close()
-			server.close()
-			inputs = []
-		else:
-			data = s.recv(1024)
-			data = data.strip()
-			if data:
-				print "received data: ",data,"from",s.getpeername()
+            # --- TODO: Modositsd az alabbi kodot, hogy a kliens uzenete alapjan valszold meg neki a chipkodjat
+            # --- TODO: pl: kliens elkuldte A kuld vissza neki hogy 1111
+            
+            inputs.append(client)
+            outputs.append(client)
+        elif not sys.stdin.isatty():
+        # elif s == sys.stdin
+            print "Close the system"
+            inputs.remove(server)
+            for c in inputs:
+                inputs.remove(c)
+                c.close()
+            server.close()
+            inputs = []
+        else:
+            data = s.recv(1024)
+            data = data.strip()
+            if data:
+                print "received data: ",data,"from",s.getpeername()
 
                 # A readable client socket has data
-				# --- TODO: kezeld a klienstol kapott uzenetet:
-				# --- TODO: ha kliens egy chipkodot kert, akkor valszold meg neki
-				# --- TODO: ha uzenet jott, akkor add hozza a ZAJhoz, majd jelezd hogy el kell kuldeni mindenkinek
+                # --- TODO: kezeld a klienstol kapott uzenetet:
+                # --- TODO: ha kliens egy chipkodot kert, akkor valszold meg neki
+                # --- TODO: ha uzenet jott, akkor add hozza a ZAJhoz, majd jelezd hogy el kell kuldeni mindenkinek
 
-			else:
-				print "client close"
-				if s in outputs:
-					outputs.remove(s)
-				inputs.remove(s)
-				s.close()
-				if s in writeable:
-					writeable.remove(s)
+            else:
+                print "client close"
+                if s in outputs:
+                    outputs.remove(s)
+                inputs.remove(s)
+                s.close()
+                if s in writeable:
+                    writeable.remove(s)
 
-	# --- TODO: ha kaptal uzenetet, akkor kuld el mindenkinek
-	for s in writeable:
-		print "sending:",next_msg,"to",s.getpeername()
-		s.send(next_msg)
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+    # --- TODO: ha kaptal uzenetet, akkor kuld el mindenkinek
+    for s in writeable:
+        print "sending:",next_msg,"to",s.getpeername()
+        s.send(next_msg)
