@@ -1,0 +1,206 @@
+\documentclass[12pt]{article}
+
+%margó méretek
+\usepackage[a4paper,
+inner = 25mm,
+outer = 25mm,
+top = 25mm,
+bottom = 25mm]{geometry}
+
+
+%packagek, ha használni akarunk valamit menet közben
+\usepackage{lmodern}
+\usepackage[magyar]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{setspace}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{setspace}
+\usepackage{spverbatim}
+
+\setstretch{1.2}
+\begin{document}
+	
+	
+
+% a címlap, túl sokat nem kell módosítani rajta, leszámítva a neved/neptunodat (dátumot)
+\begin{titlepage}
+	\vspace*{0cm}
+	\centering
+	\begin{tabular}{cp{1cm}c}
+		\begin{minipage}{4cm}
+			\vspace{0pt}
+			\includegraphics[width=1\textwidth]{elte_cimer}
+		\end{minipage} & &
+		\begin{minipage}{7cm}
+			\vspace{0pt}Eötvös Loránd Tudományegyetem \vspace{10pt} \newline
+			Informatikai Kar \vspace{10pt} \newline
+			Programozási Nyelvek és Fordítóprogramok Tanszék
+		\end{minipage}
+	\end{tabular}
+	
+	\vspace*{0.2cm}
+	\rule{\textwidth}{1pt}
+	
+	\vspace*{3cm}
+	{\Huge Osztott rendszerek specifikációja és implementációja }
+	
+	\vspace*{0.5cm}
+	{\normalsize IP-08bORSIG}
+	
+	\vspace{2cm}
+	{\huge Dokumentáció az 1. beadandóhoz}
+	
+	\vspace*{5cm}
+	
+	{\large \verb|Abonyi-Tóth Ádám| } % (név)
+	
+	{\large \verb|DKC31P| }  % (neptun)
+		
+	
+	\vfill
+	
+	\vspace*{1cm}
+	2017. október 26. % (dátum)
+\end{titlepage}
+
+\section{Kitűzött feladat}
+
+Adott egy bemeneti fájl, amelynek sorait szavanként hash-elni kell.
+Egy szó hashértéke a benne lévő karakterek hashértékének összege.
+A szó egy \verb|'c'| betűjének hashkódja (\verb|'kód'|) az alábbi módon áll elő:
+\\
+\verb|  'kód' : Nemnegatív egész szám := 1638; (0x666)| \\
+\verb|  ha 'c' ASCII értéke páratlan:| \\
+\verb|      a 'kód'-ot bitenként shifteljük balra 11-et| \\
+\verb|  egyébként:| \\
+\verb|      'kód'-ot shifteljük 6-ot bitenként balra.| \\
+\verb|  'kód' := 'kód' XOR ('c' ASCII értéke BITENKÉNTI ÉSELVE 255-el); (0xFF)| \\
+\verb|  Ha az így kapott 'kód' prím szám, akkor bitenként 'vagy'-oljuk, amennyiben| \\
+\verb|  nem prím, 'és'-eljük össze 305419896-tal. (0x12345678)|
+\\
+A program feladata az, hogy a bemeneti fájl (\verb|input.txt|) sorait párhuzamosan hash-elje,
+és az eredményt kiírja (a sorok sorrendjét megtartva) a kimeneti fájlba (\verb|output.txt|).
+\\
+A bemeneti fájl első sora egy $N$ természetes számot tartalmaz, utána pedig $N$ sornyi
+szöveges információ található. Feltehetjük, hogy a szövegben az angol ábécé betűit
+használó szavak, valamint általános írásjelek (pont, vessző, kérdő- és felkiáltójel,
+aposztróf, kettőspont stb.) találhatóak.
+\\
+Példa bemenet: \\
+\verb|4| \\
+\verb|Never gonna give you up, never gonna let you down| \\
+\verb|Never gonna run around and desert you| \\
+\verb|Never gonna make you cry, never gonna say goodbye| \\
+\verb|Never gonna tell a lie and hurt you| \\
+
+\section{Felhasználói dokumentáció}
+
+\subsection{Rendszer-követelmények, telepítés}
+
+A programunk több platformon is futtatható, dinamikus függősége nincsen, bármelyik, manapság használt PC-n működik. Külön telepíteni nem szükséges, elég a futtatható állományt elhelyezni a számítógépen.
+
+\subsection{A program használata}
+
+A program használata egyszerű, külön paraméterek nem kötelezőek, így intézőből
+is indítható. Ha a programot paraméterek nélkül futtatjuk, a bemenetét a futtatható
+állomány mellett kell elhelyezni az \textit{input.txt} nevű fájlban. Ha pontosan egy
+parancssori paramétert kap a program, akkor az így megadott paraméter lesz a bemeneti
+fájl elérési útja.
+\\
+Figyeljünk az inputfájlban található adatok helyességére és megfelelő tagolására, mivel
+az alkalmazás külön ellenőrzést nem végez erre vonatkozóan. A futás során az alkalmazás
+mellett található \textit{output.txt} fájl tartalmazza a kapott eredményt, ahol az
+\textit{i}-ik sor a bemeneti fájl \textit{i+1}-ik sorának hashértéke.
+
+\section{Fejlesztői dokumentáció}
+
+\subsection{Megoldási mód}
+
+A kódunkat logikailag két részre bonthatjuk, egy fő-, illetve több alfolyamatra.
+A fő folyamatunkat a \verb|main()| és a \verb|read()| függvények fogják megvalósítani,
+melyek feladata a bementi fájl beolvasása, illetve az alfolyamatok munkavégzési
+idejének mérése. Az alfolyamatok a bemeneti állomány egy-egy sorának hash-eléséért
+felelősek. A végeredményt a főfolyamat írja ki a kimeneti állományba.
+
+\subsection{Implementáció}
+
+A bemeneti fájlt \verb|std::vector<std::string>| típussal fogjuk megvalósítani,
+míg az alfolyamatokat egy \verb|std::future<std::string>| típusparaméterű vektorban
+fogjuk tárolni. A szükséges $N$ folyamatot az \verb|std::async()| függvény
+segítségével, azonnal fogjuk új szálon indítani, paraméterül a végrehajtandó
+\verb|process_line()| függvényt, illetve a szöveg egy sorát fogjuk átadni.
+
+A \verb|process_line()| függvény feladata egy sor szavainak hash-elése, és a kiszámolt
+hash-értékekből a kimenet sorainak összeállítása. Az implementáció használhatott volna
+\verb|std::istream_iterator<T>|-on alapuló \verb|std::transform()| függvényt,
+de az iterátor csak pointeren keresztül érte volna el a stream-eket, ez pedig a
+feladat egyszerűségéhez képest felesleges overhead-et jelentett volna.
+
+A szavak hashértékének kiszámítása triviális, a karakterek hashértékének számítása
+szigorúan a feladat specifikációja alapján történik. Az \verb|is_prime(uint32_t)|
+függvényben azért van kibontva az első 5 prímmel való oszthatóság, mert a modern
+fordítók alkalmazhatnak olyan optimalizációkat, amik a fordítási időben ismert
+értékekkel való maradékszámítást gyorsabbá teszik, mint egy változó esetében.
+A \verb|nontrivial_prime(uint32_t)| függvény egy template paraméterrel rendelkezik,
+mely azt jelzi, hogy mettől kezdje vizsgálni a prímszámokat. Mivel ez már fordítási
+időben ismert, érdemesebb így, template paraméterként átadni, hiszen így teret
+adhatunk egyéb, fordítási idejű optimalizációknak.
+
+A feladat egyszerűsége révén egyetlen forrásfájlban, a \verb|main.cpp|-ben található a teljes implementációs kód.
+
+\subsection{Fordítás menete}
+
+A programunk forráskódját a \verb|main.cpp| fájl tartalmazza. A fordításhoz
+elengedhetetlen egy \verb|C++11| szabványt támogató fordítóprogram a rendszeren.
+Ehhez használhatjuk az \textit{MSVC}, \textit{g++} és \textit{clang} bármelyikét,
+de \textit{Windows} operációs rendszer alatt \textit{MinGW} fordítóval a fordítás sikertelen lehet,
+mert ezen a platformon az \verb|std::future| típus implementációja hiányozhat.
+
+A fordítás menete (4.8.4-es verziójú g++ használata esetén) a következő:  \verb|g++ main.cpp|
+\verb|-std=c++11 -pthread|.
+A speciális, \verb|-std=c++11| kapcsoló azért
+szükséges, mert alapértelmezés szerint ez a verziójú fordítóprogram még a régi, C++98-as
+szabványt követi, melyben a felhasznált nyelvi elemek még nem voltak jelen.
+A \verb|-pthread| kapcsolóra azért van szükség, hogy a fordító, illetve az operációs
+rendszer megengedje a programnak a többszálúság használatát.
+
+\subsection{Tesztelés}
+
+A program tesztelése két részből állt, az egyik a megoldás helyességét vizsgálta, a másik
+a kód sebességét.
+
+A helyesség vizsgálatához a programot lefuttattam a feladathoz mellékelt bemeneti fájlokra,
+és \verb|git diff --no-index --color-words| paranccsal ellenőriztem, hogy nincs eltérés az
+elvárt és a kapott eredmények között.
+
+A sebesség vizsgálatához a ugyanazt a szöveget tördeltem több sorra, ezzel
+ellenőrizve, hogy hogyan befolyásolja a futásidőt az állandó mennyiségű feladatra
+kiosztott szálak száma. A teszteket futtató processzor 4 logikai magot működtetett
+2.9GHz-es órajelen. Az eredmények alább láthatóak.\\[12px]
+\resizebox{\textwidth}{!}{
+	\begin{tabular}{l|*{14}{c}}
+		Szálak száma & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & \dots & 16\\
+		\hline
+		Futásidő (s) & 1.082 & 0.551 & 0.434 & 0.349 & 0.449 & 0.328 & 0.312 & 0.305 & 0.302 & 0.316 & 0.316 & 0.318 & \dots & 0.316\\
+		\hline
+		Összköltség  & 1.082 & 1.102 & 1.302 & 1.396 & 2.246 & 1.969 & 2.181 & 2.443 & 2.717 & 3.164 & 3.477 & 3.815 & \dots & 5.06
+	\end{tabular}
+}\\[12px]
+
+A táblázat első négy oszlopában az összköltség \textit{(futásidő $\times$ szálak száma)}
+nagyjából állandó, tehát itt a futásidő megközelítőleg fordítottan arányos 
+a processzek számával.
+
+A további oszlopokból az derül ki, hogy az összköltség hirtelen megnő, amint az
+indított szálak mennyisége meghaladja a processzor logikai magjainak számát,
+ami azt jelenti, hogy onnantól kezdve a gyorsulás nem lesz olyan nagy mértékű,
+mint amíg nem használtunk ki minden processzormagot. Azt is láthatjuk, hogy a
+futásidő egy idő után stabilizálódik $0.316s$ körül, akárhány szálat indítunk.
+
+
+\end{document}
