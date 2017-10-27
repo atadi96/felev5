@@ -162,12 +162,14 @@ de \textit{Windows} operációs rendszer alatt \textit{MinGW} fordítóval a for
 mert ezen a platformon az \verb|std::future| típus implementációja hiányozhat.
 
 A fordítás menete (4.8.4-es verziójú g++ használata esetén) a következő:  \verb|g++ main.cpp|
-\verb|-std=c++11 -pthread|.
+\verb|-std=c++11 -pthread -O3|.
 A speciális, \verb|-std=c++11| kapcsoló azért
 szükséges, mert alapértelmezés szerint ez a verziójú fordítóprogram még a régi, C++98-as
 szabványt követi, melyben a felhasznált nyelvi elemek még nem voltak jelen.
 A \verb|-pthread| kapcsolóra azért van szükség, hogy a fordító, illetve az operációs
-rendszer megengedje a programnak a többszálúság használatát.
+rendszer megengedje a programnak a többszálúság használatát. A \verb|-O3| kapcsoló
+bekapcsolja az optimalizálást, így elérhetővé téve például a gyorsabb modulózást,
+esetleg függvények inline-olását.
 
 \subsection{Tesztelés}
 

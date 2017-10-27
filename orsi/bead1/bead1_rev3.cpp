@@ -8,6 +8,7 @@
 #include <chrono>
 #include <algorithm>
 #include <cstdlib>
+#include <numeric>
 
 template<uint32_t N>
 bool nontrivial_prime(uint32_t n) {
