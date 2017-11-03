@@ -20,18 +20,22 @@ namespace Lopakodo
         {
             public readonly string Name;
             public readonly string Filename;
+            public readonly int Width;
+            public readonly int Height;
 
-            protected MapID(string name, string filename)
+            protected MapID(string name, string filename, int width, int height)
             {
                 Name = name;
                 Filename = filename;
+                Width = width;
+                Height = height;
             }
         }
 
         private class MapIDCtor : MapID
         {
-            public MapIDCtor(string name, string filename)
-                : base(name, filename) { }
+            public MapIDCtor(string name, string filename, int width, int height)
+                : base(name, filename, width, height) { }
         }
 
         private string _sourceDir;
@@ -53,12 +57,16 @@ namespace Lopakodo
                     {
                         using (var fs = new FileStream(filename, FileMode.Open))
                         {
-                            string mapName = new StreamReader(fs).ReadLine();
-                            maps.Add(new MapIDCtor(mapName, filename));
+                            StreamReader sr = new StreamReader(fs);
+                            string mapName = sr.ReadLine();
+                            string[] sizeData = sr.ReadLine().Split(SIZE_SEPARATOR);
+                            int width = Int32.Parse(sizeData[0]);
+                            int height = Int32.Parse(sizeData[1]);
+                            maps.Add(new MapIDCtor(mapName, filename, width, height));
                         }
                     }
                 }
-                catch (Exception) { }
+                catch (Exception e) { }
 
                 return maps;
             }
