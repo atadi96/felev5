@@ -56,7 +56,15 @@ namespace Lopakodo
             SetLoading(false);
             SelectMapControl = CreateSelectMapControl(
                 maps,
-                (object o, MapSelectionEventArgs m) => { return; }
+                (object o, MapSelectionEventArgs m) => {
+                    Highlight(MenuControl);
+                    Controls.Remove(SelectMapControl);
+                    SelectMapControl = null;
+                    if (m.SelectedMap == null)
+                    {
+                        //kek
+                    }
+                }
             );
             Controls.Add(SelectMapControl);
             Highlight(SelectMapControl, MenuControl);
@@ -124,17 +132,23 @@ namespace Lopakodo
             sizeLabel.Top = 40;
             sizeLabel.Text = "Size: " + map.Width + "x" + map.Height;
             sizeLabel.Anchor = AnchorStyles.Left;
+            sizeLabel.Dock = DockStyle.Fill;
 
             Button loadButton = new Button();
             loadButton.Top = 40;
             loadButton.Text = "Start";
             loadButton.Anchor = AnchorStyles.Right;
+            loadButton.Dock = DockStyle.Right;
+            var ok = loadButton.Margin;
+            ok.Right = 0;
+            loadButton.Margin = ok;
             loadButton.Click += (object o, EventArgs e) =>
                 handler(o, new MapSelectionEventArgs(map));
 
             box.Controls.Add(sizeLabel);
             box.Controls.Add(loadButton);
             box.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            box.Margin = new Padding(0, 0, 0, 12);
             return box;
         }
 
@@ -156,9 +170,22 @@ namespace Lopakodo
             if (mapControls.Length == 0)
             {
                 Label label = new Label();
+                label.Height = 100;
                 label.Text = "No maps available";
                 flPanel.Controls.Add(label);
             }
+            Panel backPanel = new Panel();
+            backPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            backPanel.Top = Math.Max(mapControls.Length, 1) * 100;
+            backPanel.Height = 50;
+            Button backButton = new Button();
+            backButton.Text = "Back";
+            backButton.Dock = DockStyle.Right;
+            backButton.Click += (object o, EventArgs e) =>
+                mapSelectionEventHandler(o, new MapSelectionEventArgs(null));
+            backPanel.Controls.Add(backButton);
+            flPanel.Controls.Add(backPanel);
+            flPanel.Padding = new Padding(12);
             return flPanel;
         }
 
