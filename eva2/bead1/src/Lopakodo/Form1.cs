@@ -60,9 +60,21 @@ namespace Lopakodo
                     Highlight(MenuControl);
                     Controls.Remove(SelectMapControl);
                     SelectMapControl = null;
-                    if (m.SelectedMap == null)
+                    if (m.SelectedMap != null)
                     {
-                        //kek
+                        var map = MapRepo.LoadMap(m.SelectedMap);
+                        GameControl = new GamePanel(
+                            map,
+                            (object o2, EventArgs e2) =>
+                            {
+                                Highlight(MenuControl, GameControl);
+                                Controls.Remove(GameControl);
+                                GameControl = null;
+                            }
+                        );
+                        GameControl.Dock = DockStyle.Fill;
+                        Controls.Add(GameControl);
+                        Highlight(GameControl, MenuControl);
                     }
                 }
             );

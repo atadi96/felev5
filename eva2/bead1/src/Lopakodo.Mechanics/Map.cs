@@ -44,7 +44,7 @@ namespace Lopakodo.Mechanics
         {
             get
             {
-                if (InBounds(p))
+                if (0 <= p.X && 0 <= p.Y && p.X < Size.X && p.Y < Size.Y)
                 {
                     return _fields[p.X, p.Y];
                 }
@@ -54,6 +54,8 @@ namespace Lopakodo.Mechanics
                 }
             }
         }
+
+        public T? this[int x, int y] => this[new Point(x,y)];
     }
 
     public class GameState
@@ -72,7 +74,7 @@ namespace Lopakodo.Mechanics
 
         public enum GameStatus { OnGoing, Won, Lost }
 
-        public enum Direction { Up, Right, Down, Left, None }
+        public enum Direction { Up = 0, Right = 1, Down = 2, Left = 3, None = 4 }
 
         private Entity[] _enemies;
         private Point[] _visibleFields;
@@ -106,11 +108,11 @@ namespace Lopakodo.Mechanics
             switch (dir)
             {
                 case Direction.Up:
-                    return new Vector2(0, 1);
+                    return new Vector2(0, -1);
                 case Direction.Right:
                     return new Vector2(1, 0);
                 case Direction.Down:
-                    return new Vector2(0, -1);
+                    return new Vector2(0, 1);
                 case Direction.Left:
                     return new Vector2(-1, 0);
                 case Direction.None:
@@ -118,6 +120,33 @@ namespace Lopakodo.Mechanics
                 default:
                     throw new ArgumentException("Invalid direction");
             }
+        }
+
+        public static Direction FromVector2(Vector2 v)
+        {
+            if (v.X == 0)
+            {
+                if (v.Y == 1)
+                {
+                    return Direction.Down;
+                }
+                if(v.Y == -1)
+                {
+                    return Direction.Up;
+                }
+            }
+            if (v.Y == 0)
+            {
+                if (v.X == 1)
+                {
+                    return Direction.Right;
+                }
+                if (v.X == -1)
+                {
+                    return Direction.Left;
+                }
+            }
+            return Direction.None;
         }
 
         private RectangleF? Hitbox(Point p)
@@ -133,7 +162,7 @@ namespace Lopakodo.Mechanics
             }
         }
 
-        public bool MoveEntity(ref Entity entity)
+        public bool TryMoveEntity(ref Entity entity)
         {
             var newPos = entity.Position + entity.Direction;
             if (!Hitbox(newPos).HasValue)
@@ -150,8 +179,8 @@ namespace Lopakodo.Mechanics
         private IEnumerable<Point> VisibleFieldsFrom(Point p)
         {
             var proximity =
-                (from x in new int[] { -1, 0, 1 }
-                 from y in new int[] { -1, 0, 1 }
+                (from x in new int[] { -2, -1, 0, 1, 2 }
+                 from y in new int[] { -2, -1, 0, 1, 2 }
                  select
                      new {
                          Coord = p + new Vector2(x, y),
@@ -165,6 +194,13 @@ namespace Lopakodo.Mechanics
                  select field.Hitbox.Value)
                 .ToArray();
             PointF viewPoint = (PointF)p + new Vector2F(0.5f, 0.5f);
+            /*Func<PointF, RectangleF, bool> kek =
+                (PointF center, RectangleF hitbox) =>
+                {
+                    LineF line = new LineF(viewPoint, center);
+                    Geometry.Intersect(new LineF(viewPoint, center), hitbox)).ToArray();
+                    return Geometry.Intersect()
+                }*/
             return
                 from field in proximity
                 where hitboxes.Where(hitbox => Geometry.Intersect(new LineF(viewPoint, field.Center), hitbox)).Count() == 0
@@ -176,7 +212,38 @@ namespace Lopakodo.Mechanics
         private Vector2 RandomDirection()
         {
             Direction dir = (Direction)random.Next(0, 5);
+            while (dir == Direction.None)
+            {
+                dir = (Direction)random.Next(0, 5);
+            }
             return Translate(dir);
+        }
+
+        private void DefinitelyMoveEntitySomewhereOrNot(ref Entity entity)
+        {
+            if (!TryMoveEntity(ref entity))
+            {
+                Entity entity2 = entity;
+                var fourDirections =
+                    from x in new int[] { -1, 0, 1 }
+                    from y in new int[] { -1, 0, 1 }
+                    where x * x + y * y == 1
+                    select entity2.Position + new Vector2(x, y);
+                var possibleSeq =
+                    from field in fourDirections
+                    where !Hitbox(field).HasValue
+                    select field - entity2.Position;
+                var possible = possibleSeq.ToArray();
+                if (possible.Length == 0)
+                {
+                    entity.Direction = new Vector2(0, 0);
+                }
+                else
+                {
+                    entity.Direction = possible[random.Next(0, possible.Length)];
+                    TryMoveEntity(ref entity);
+                }
+            }
         }
 
         public void StepState(Direction playerDirection)
@@ -188,15 +255,13 @@ namespace Lopakodo.Mechanics
 
             ++Updates;
             var player = Player;
-            bool playerMoved = MoveEntity(ref player);
+            player.Direction = Translate(playerDirection);
+            bool playerMoved = TryMoveEntity(ref player);
             Player = player;
 
             for(int i = 0; i < _enemies.Length; ++i)
             {
-                while (!MoveEntity(ref _enemies[i]))
-                {
-                    _enemies[i].Direction = RandomDirection();
-                }
+                DefinitelyMoveEntitySomewhereOrNot(ref _enemies[i]);
             }
             _visibleFields =
                 _enemies.Select(entity => entity.Position)

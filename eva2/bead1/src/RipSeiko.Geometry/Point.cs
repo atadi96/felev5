@@ -121,6 +121,11 @@ namespace RipSeiko.Geometry
             }
         }
 
+        public static explicit operator PointF(Vector2F v)
+        {
+            return new PointF(v.X, v.Y);
+        }
+
         public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode();
 
         public bool Equals(PointF other)

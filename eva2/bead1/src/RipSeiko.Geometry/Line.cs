@@ -54,7 +54,7 @@ namespace RipSeiko.Geometry
 
         public LineF(PointF p, Vector2F v) : this(p, p + v) { }
 
-        public LineF(int x1, int y1, int x2, int y2) : this(new PointF(x1, y1), new PointF(x2, y1)) { }
+        public LineF(float x1, float y1, float x2, float y2) : this(new PointF(x1, y1), new PointF(x2, y1)) { }
 
         public static LineF operator +(LineF l, Vector2F v) => new LineF(l.P1 + v, l.P2 + v);
 

@@ -71,6 +71,13 @@ namespace RipSeiko.Geometry.Tests
                     new LineF(new PointF(2, 8), new PointF(5, 0))
                 )
             );
+            Assert.AreEqual(
+                false,
+                Geometry.Intersect(
+                    new RectangleF(PointF.Zero, 1, 1),
+                    new LineF(0.5f, 1.5f, 1.5f, 0.5f)
+                )
+            );
         }
     }
 }

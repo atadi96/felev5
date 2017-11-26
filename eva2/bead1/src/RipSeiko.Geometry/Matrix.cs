@@ -108,6 +108,13 @@ namespace RipSeiko.Geometry
             return new Vector2F(result.X, result.Y);
         }
 
+        public static RectangleF operator *(Matrix3F m, RectangleF v)
+        {
+            var p1 = m * (Vector2F)v.TopLeft;
+            var p2 = m * (Vector2F)v.BottomRight;
+            return new RectangleF((PointF)p1, (PointF)p2);
+        }
+
         public static Matrix3F operator*(Matrix3F m, float l)
         {
             return new Matrix3F(m[0, 0] * l, m[0, 1] * l, m[1, 0] * l, m[1, 1] * l);
@@ -141,7 +148,7 @@ namespace RipSeiko.Geometry
 
         public static Matrix3F Scale(float f) => Scale(new Vector2F(f));
 
-        public static Matrix3F Translate(Vector2F v) => new Matrix3F(1, 0, 0, 0, 1, 0, v.X, v.Y, 1);
+        public static Matrix3F Translate(Vector2F v) => new Matrix3F(1, 0, v.X, 0, 1, v.Y, 0, 0, 1);
 
         public static Matrix3F Rotate(float radAngle) =>
             new Matrix3F((float)Math.Cos(radAngle), (float)Math.Sin(radAngle), -(float)Math.Sin(radAngle), (float)Math.Cos(radAngle));

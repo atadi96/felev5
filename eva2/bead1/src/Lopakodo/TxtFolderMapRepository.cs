@@ -10,11 +10,11 @@ namespace Lopakodo
     {
         private const string MAP_EXTENSION = ".map";
         private const char SIZE_SEPARATOR = 'x';
-        private const string START_CHARACTER = "S";
-        private const string FINISH_CHARACTER = "F";
-        private const string ENEMY_CHARACTER = "E";
-        private const string WALL_CHARACTER = "W";
-        private const string FLOOR_CHARACTER = " ";
+        private const char START_CHARACTER = 'S';
+        private const char FINISH_CHARACTER = 'F';
+        private const char ENEMY_CHARACTER = 'E';
+        private const char WALL_CHARACTER = 'W';
+        private const char FLOOR_CHARACTER = ' ';
 
         public class MapID
         {
@@ -88,7 +88,7 @@ namespace Lopakodo
 
                 for (int y = 0; y < height; y++)
                 {
-                    string[] fields = sr.ReadLine().Split();
+                    char[] fields = sr.ReadLine().ToCharArray();
                     for (int x = 0; x < width; x++)
                     {
                         switch (fields[x])
