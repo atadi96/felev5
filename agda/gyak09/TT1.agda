@@ -73,11 +73,11 @@ sym {A}{a}{a'} =  λ aeqa' → J {A = A}{a} (λ a' w → a' ≡ a) refl {a'} aeq
 trans : {A : Set}{a a' a'' : A} → a ≡ a' → a' ≡ a'' → a ≡ a''
 trans {A}{a}{a'}{a''} v  = J {A = A}{a}(λ a' w → a' ≡ a'' → a ≡ a'')  (λ w → w) v 
 
-cong  : {A B : Set}(f : A → B){a a' : A} → a ≡ a' → f a ≡ f a'
-cong {A}{B} f {a}{a'} aa' = J {_} {A} {a}  {_} (λ x w → f a ≡ f x ) refl aa'
+cong  : ∀{i}{j}{A : Set i}{B : Set j}(f : A → B){a a' : A} → a ≡ a' → f a ≡ f a'
+cong {A = A}{B} f {a}{a'} aa' = J {_} {A} {a}  {_} (λ x w → f a ≡ f x ) refl aa'
 
-subst : {A : Set}(P : A → Set){a a' : A} → a ≡ a' → P a → P a'
-subst {A} P {a} {a'} aa' Pa = J {_} {A} {_} (λ x w →  P x ) Pa aa'  
+subst : ∀{i}{A : Set i}{j}(P : A → Set j){a a' : A} → a ≡ a' → P a → P a'
+subst {A = A} P {a} {a'} aa' Pa = J {_} {A} {_} (λ x w →  P x ) Pa aa'  
 
 idr : {A : Set}{a a' : A}(p : a ≡ a') → trans p refl ≡ p
 idr {A} {a} {a'} p = J (λ a' p → trans p refl ≡ p ) refl p
@@ -139,13 +139,22 @@ dec≡Bool =
       )
 
 dec≡ℕ : (n n' : ℕ) → Decidable (n ≡ n')
-dec≡ℕ = {!!}
+dec≡ℕ = λ n n' → Indℕ (λ n' → Decidable (n ≡ n')) ((Indℕ (λ n → (n ≡ zero) + (n ≡ zero → ⊥)) (inj₁ refl) (λ {n} w → {!!}) n)) (λ {n} w → {!case (λ ((x ≡ x) + (x ≡ x → ⊥)) → (x ≡ suc x) + (x ≡ suc x → ⊥) ) ?) ? w!}  ) n'
+
+
 
 dec≡+ : ∀{i}{A B : Set i}
         (dec≡A : (a a' : A) → Decidable (a ≡ a'))
         (dec≡B : (b b' : B) → Decidable (b ≡ b'))
       → (w w' : A + B) → Decidable (w ≡ w')
-dec≡+ = {!!}
+dec≡+{_}{A}{B} decA decB w w'  =
+  case (λ w → (w ≡ w') + (w ≡ w' → ⊥))
+    ((λ x → case (λ w' → (inj₁ x ≡ w') + (inj₁ x ≡ w' → ⊥))
+        (λ x' →  case _ (λ w → inj₁ (cong inj₁ w)) {!!} (decA x x'))
+        {!!}
+        w'))
+    {!!}
+    w 
 
 ------------------------------------------------------------------------------
 -- lists
