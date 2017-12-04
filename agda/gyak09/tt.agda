@@ -137,16 +137,24 @@ postulate
 -- lists
 ------------------------------------------------------------------------------
 
+-- data List A = []l | A ∷l (List A)
+
 postulate
   List    : ∀{i}(A : Set i) → Set i
   []l     : ∀{i}{A : Set i} → List A
   _∷l_    : ∀{i}{A : Set i}(x : A)(xs : List A) → List A
-  IndList : ∀{i}{A : Set i}{j}(P : List A → Set j)(p[] : P []l)(p∷ : {xs : List A} → P xs → (x : A) → P (x ∷l xs))
+  IndList : ∀{i}{A : Set i}{j}
+            (P : List A → Set j)
+            (p[] : P []l)
+            (p∷ : {xs : List A} → P xs → (x : A) → P (x ∷l xs))
           → (xs : List A) → P xs
   []lβ    : ∀{i}{A : Set i}{j}{P : List A → Set j}{p[] : P []l}{p∷ : {xs : List A} → P xs → (x : A) → P (x ∷l xs)}
           → IndList P p[] p∷ []l ≡ p[]
   ∷lβ     : ∀{i}{A : Set i}{j}{P : List A → Set j}{p[] : P []l}{p∷ : {xs : List A} → P xs → (x : A) → P (x ∷l xs)}
           → {xs : List A}{x : A} → IndList P p[] p∷ (x ∷l xs) ≡ p∷ (IndList P p[] p∷ xs) x
+
+{-# REWRITE []lβ #-}
+{-# REWRITE ∷lβ #-}
 
 infixr 5 _∷l_
 
@@ -165,4 +173,8 @@ postulate
   ∷β     : ∀{i}{A : Set i}{j}{P : {n : ℕ} → Vec A n → Set j}{p[] : P []}{p∷ : {n : ℕ}{xs : Vec A n} → P xs → (x : A) → P (x ∷ xs)}
            {n : ℕ}{xs : Vec A n}{x : A} → IndVec P p[] p∷ (x ∷ xs) ≡ p∷ (IndVec P p[] p∷ xs) x
 
+{-# REWRITE []β #-}
+{-# REWRITE ∷β #-}
+
 infixr 5 _∷_
+

@@ -98,7 +98,7 @@ true≢false = λ tf → subst true? tf tt
 zero? : ℕ → Set
 zero? = λ n → Indℕ _ ⊤ (λ _ → ⊥) n
 
-0≢1 : (zero ≡ suc zero) → ⊥
+0≢1 : {n : ℕ} → (zero ≡ suc n) → ⊥
 0≢1 = λ w → subst zero? w tt
 
 ------------------------------------------------------------------------------
@@ -168,10 +168,13 @@ l2 = []l
 
 
 lengthl : {A : Set} → List A → ℕ
-lengthl = {!!}
+lengthl = λ xs → IndList (λ _ → ℕ) zero (λ n _ → suc n) xs 
+
+plengthl : lengthl (zero ∷l zero ∷l zero ∷l []l) ≡ suc (suc (suc zero))
+plengthl = refl
 
 mapsl : {A B : Set} → List (A → B) → List A → List B
-mapsl = {!!}
+mapsl = λ f xs → {!IndList _ []l !}
 
 headl : {A : Set} → List A → A
 headl = {!!}
@@ -180,7 +183,9 @@ taill : {A : Set} → List A → List A
 taill = {!!}
 
 headl' : {A : Set}(xs : List A) → ¬ (lengthl xs ≡ zero) → A
-headl' = {!!}
+headl' {A} = λ xs q → IndList (λ xs → ¬(lengthl xs ≡ zero) → A)
+                                           (λ zzn → abort {_}{A}(zzn refl))
+                                           (λ _ x _ → x) xs q
 
 ------------------------------------------------------------------------------
 -- vectors
@@ -196,10 +201,10 @@ v2 : Vec Bool zero
 v2 = []
 
 maps : {n : ℕ}{A B : Set} → Vec (A → B) n → Vec A n → Vec B n
-maps = {!!}
+maps {n}{A}{B} fs as = IndVec (λ {n} xs → Vec B n) [] ((λ {n} {xs} bs x → {!head fs!} ∷ bs )) as
 
 head : {n : ℕ}{A : Set} → Vec A (suc n) → A
-head = {!!}
+head {n}{A} vec = IndVec (λ {m} xs → m ≡ suc n → A) ((λ w → abort (0≢1 w))) (λ _ x _ → x) vec refl
 
-tail : {n : ℕ}{A : Set} → Vec A (suc n) → A
-tail = {!!}
+tail : {n : ℕ}{A : Set} → Vec A (suc n) → Vec A n
+tail {n} {A} xs = IndVec (λ {m} xs → m ≡ suc n → Vec A n) (λ w → abort (0≢1 w)) (λ {m}{xs} _ _ w → {!subst (Vec A) !}) xs refl
