@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RipSeiko.Geometry", "..\Rip
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RipSeiko.Geometry.Tests", "..\RipSeiko.Geometry.Tests\RipSeiko.Geometry.Tests.csproj", "{3FB97E7F-3CFD-4356-92AD-53383EC49500}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lopakodo.WPF", "..\Lopakodo.WPF\Lopakodo.WPF.csproj", "{51EF62C8-9A9E-4D8C-8042-427024011F36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3FB97E7F-3CFD-4356-92AD-53383EC49500}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FB97E7F-3CFD-4356-92AD-53383EC49500}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FB97E7F-3CFD-4356-92AD-53383EC49500}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51EF62C8-9A9E-4D8C-8042-427024011F36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51EF62C8-9A9E-4D8C-8042-427024011F36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51EF62C8-9A9E-4D8C-8042-427024011F36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51EF62C8-9A9E-4D8C-8042-427024011F36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

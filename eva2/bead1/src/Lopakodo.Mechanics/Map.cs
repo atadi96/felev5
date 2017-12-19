@@ -263,6 +263,7 @@ namespace Lopakodo.Mechanics
             {
                 DefinitelyMoveEntitySomewhereOrNot(ref _enemies[i]);
             }
+
             _visibleFields =
                 _enemies.Select(entity => entity.Position)
                     .SelectMany(pos => VisibleFieldsFrom(pos))
