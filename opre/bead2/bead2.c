@@ -3,6 +3,9 @@
 #include <time.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/types.h>
 
 #define NAME_LENGTH 50
 #define EMAIL_LENGTH 50
@@ -27,6 +30,17 @@ typedef struct {
     int length;
     registration_t* regs;
 } data_model_t;
+
+typedef struct {
+    int reg_num;
+    int cost;
+    route_t route;
+} child_input_t;
+
+typedef struct {
+    int beer;
+    int money;
+} child_output_t;
 
 int load_model(data_model_t* model) {
     FILE* file = fopen(SAVE_FILE, "r");
@@ -154,8 +168,10 @@ void press_enter() {
     getchar();
 }
 
+void handler(int asd) {}
 
 int main() {
+    signal(SIGUSR1,handler);
     int quit = 0;
     while(!quit) {
         clrscr();
@@ -166,6 +182,7 @@ int main() {
         printf("  3: Regisztracio torlese\n");
         printf("  4: Teljes nevsor megjelenitese\n");
         printf("  5: Utvonal nevsor megjelenitese\n");
+        printf("  6: Masodik beadando!!!!!\n");
         printf("  0: Kilepes\n");
         data_model_t model;
         load_model(&model);
@@ -253,6 +270,72 @@ int main() {
                     }
                     press_enter();
                     break;
+                }
+            case 6:
+                {
+                    int participants[3] = {0,0,0};
+                    int registrations[3] = {0,0,0};
+                    int i;
+                    for(i = 0; i < model.length; ++i) {
+                        registration_t* reg = &(model.regs[i]);
+                        participants[reg->route] += 1 + reg->num_guests;
+                        ++registrations[reg->route];
+                    }
+                    route_t route;
+                    for(route = 0; route < 3; ++route) {
+                        if(participants[route] >= 10) {
+                            int pipefd[2];
+                            pid_t pid;
+                            
+                            if (pipe(pipefd) == -1) {
+                                perror("Hiba a pipe nyitaskor!");
+                                exit(EXIT_FAILURE);
+                            }
+                            pid = fork();
+                            if (pid == -1) {
+                                perror("Fork hiba");
+                                exit(EXIT_FAILURE);
+                            }
+                            
+                            if (pid == 0) {// child process
+                                kill(getppid(),SIGUSR1);
+                                child_input_t input;
+                                read(pipefd[0],&input,sizeof(child_input_t)); //reading
+                                printf("Utvonal: %d\n", input.route);
+                                child_output_t output = {0,0};
+                                for(i = 0; i < input.reg_num; ++i) {
+                                    printf("Regisztraciok az utvonalon: %d\n", input.reg_num);
+                                    registration_t reg;
+                                    printf("%s\n", reg.name);
+                                    read(pipefd[0], &reg, sizeof(registration_t));
+                                    output.beer += (reg.num_guests + 1) * 5;
+                                    output.money += (int)(reg.num_guests * 0.85 * input.cost * 5) + (input.cost * 5);
+                                }
+                                close(pipefd[0]); // finally we close the used read end
+
+                                write(pipefd[1], &output, sizeof(child_output_t));
+                                close(pipefd[1]);
+                                sleep(3);
+                                kill(getppid(),SIGUSR1);
+                                exit(0);
+                            } else {// szulo process
+                                child_input_t input = {registrations[route],250,route};
+                                write(pipefd[1], &input, sizeof(child_input_t));
+                                for(i = 0; i < model.length; ++i) {
+                                    registration_t* reg = &(model.regs[i]);
+                                    if(reg->route == route) {
+                                        write(pipefd[1], reg, sizeof(registration_t));
+                                    }
+                                }
+                                close(pipefd[1]); // Closing write descriptor
+                                pause();
+                                child_output_t lkasbdflj;
+                                read(pipefd[0], &lkasbdflj, sizeof(child_output_t));
+                                close(pipefd[0]);
+                                pause();
+                            }
+                        }
+                    }
                 }
         }
         free(model.regs);
