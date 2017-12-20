@@ -1,0 +1,185 @@
+\documentclass[12pt]{article}
+
+%margó méretek
+\usepackage[a4paper,
+inner = 25mm,
+outer = 25mm,
+top = 25mm,
+bottom = 25mm]{geometry}
+
+
+%packagek, ha használni akarunk valamit menet közben
+\usepackage{lmodern}
+\usepackage[magyar]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{setspace}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{setspace}
+\usepackage{spverbatim}
+
+\setstretch{1.2}
+\begin{document}
+	
+	
+
+% a címlap, túl sokat nem kell módosítani rajta, leszámítva a neved/neptunodat (dátumot)
+\begin{titlepage}
+	\vspace*{0cm}
+	\centering
+	\begin{tabular}{cp{1cm}c}
+		\begin{minipage}{4cm}
+			\vspace{0pt}
+			\includegraphics[width=1\textwidth]{elte_cimer}
+		\end{minipage} & &
+		\begin{minipage}{7cm}
+			\vspace{0pt}Eötvös Loránd Tudományegyetem \vspace{10pt} \newline
+			Informatikai Kar \vspace{10pt} \newline
+			Programozási Nyelvek és Fordítóprogramok Tanszék
+		\end{minipage}
+	\end{tabular}
+	
+	\vspace*{0.2cm}
+	\rule{\textwidth}{1pt}
+	
+	\vspace*{3cm}
+	{\Huge Osztott rendszerek specifikációja és implementációja }
+	
+	\vspace*{0.5cm}
+	{\normalsize IP-08bORSIG}
+	
+	\vspace{2cm}
+	{\huge Dokumentáció az 2. beadandóhoz}
+	
+	\vspace*{5cm}
+	
+	{\large \verb|Abonyi-Tóth Ádám| } % (név)
+	
+	{\large \verb|DKC31P| }  % (neptun)
+		
+	
+	\vfill
+	
+	\vspace*{1cm}
+	2017.november 30. % (dátum)
+\end{titlepage}
+
+\section{Kitűzött feladat}
+
+Feladatunk annak eldöntése, hogy egy adott halmaznak létezik e olyan részhalmaza, melyben található elemek összege pontosan megegyezik egy előre megadott számmal!
+\\
+A szükséges adatokat a program 3 parancssori paraméteren keresztül kapja.
+\\
+Az első, egy egész értékű adat, mely a feladatban definiált számot jelzi, ezt kell valamilyen módon elérni a halmazelemek összegével.
+\\
+A második, egy fájl neve - ez tartalmazza a kiinduló halmaz elemeit (inputfájl). A felépítése az alábbi: A fájl első sorában egy nemnegatív egész szám (N) áll - a kiinduló halmazunk elemszáma tehát N. A következő sorban összesen N db egész számot olvashatunk (pozitív és negatív egyaránt), melyek a halmaz elemeit jelölik (sorrendiséget nem kötünk meg köztük).
+\\
+Egy megfelelő bemeneti fájl (például data.txt) ekkor:
+\\
+\verb|6| \\
+\verb|3 34 4 17 5 2|
+\\
+A harmadik paraméter, annak a fájlnak a neve, melybe a feladat megoldása során kapott választ kell írni.
+\\
+A kimeneti fájlban található információ az alábbi legyen:
+\\
+\verb|   létezik N összegű részhalmaz:| \\
+\verb|      'May the subset be with You!'| \\
+\verb|   nem létezik ilyen részhalmaz:| \\
+\verb|'I find your lack of subset disturbing!'| \\
+
+\section{Felhasználói dokumentáció}
+
+\subsection{Rendszer-követelmények, telepítés}
+
+A program futtatásához szükséges a PVM rendszer megléte. Telepítéséhez a két bináris
+állomány, a \textit{master} és a \textit{child} megfelelő helyen való elhelyezése szükséges.
+
+\subsection{A program használata}
+
+A program futtatásához előbb lépjünk be PVM-be, és inicializáljuk tetszés szerint a blade-eket.
+Az indítás a PVM-en belül a következő paranccsal történik:
+\\
+\verb|spawn -> master sum input.txt output.txt|,
+\\
+ahol \verb|sum| a kérdéses összeg, \verb|input.txt| a bemeneti fájl neve, \verb|output.txt| pedig
+a kimeneti fájl neve a felhasználó könyvtárához képest.
+\\
+Figyeljünk az inputfájlban található adatok helyességére és megfelelő tagolására, mivel
+az alkalmazás külön ellenőrzést nem végez erre vonatkozóan. Futás után a paraméterben megadott
+fájl tartalmazza a kapott eredményt.
+
+\section{Fejlesztői dokumentáció}
+
+\subsection{Megoldási mód}
+
+A kódot logikailag három egységre osztjuk: a probléma reprezentációja, a főprogram, és a megoldó
+program. A főprogram feladata a be- és kimenet kezelése, a gyermeké a feladat elosztott megoldása,
+a harmadik pedig a probléma (és alproblémák) konzisztenciáját biztosítja.
+A végeredményt a főfolyamat írja ki a kimeneti állományba.
+
+\subsection{Implementáció}
+
+A probléma reprezentációja egész számok egy sorozata, és a kívánt összeg. Ehhez a kód a \verb|problem.hpp|
+fájlban található. Az implementációs osztály tartalmazza a domain-hez tartozó műveleteket is:
+alproblémák elkészítése, a teljes probléma küldése és fogadása PVM-mel, illetve a probléma állapotának
+felmérése (megoldott, megoldhatatlan, nem eldönthető).
+\\
+A \verb|master.cpp| fájlban van a főprogram megvalósítása. A \verb|main| függvény létrehozza a kezdeti
+feladatot az összeggel és a bemeneti fájlban lévő számokkal, majd a PVM segítségével meghív egy gyermek
+folyamatot a feladat megoldására. Amint a gyermek processz végzett, a program kiírja az eredményt a
+harmadik paraméterben kapott kimeneti fájlba.
+\\
+A gyermek folyamat először fogadja a szülőtől a megoldandó problémát. Ha a probléma állapota ismert
+(megoldott, vagy megoldhatatlan), akkor visszaadja ezt az értéket, ha nem akkor a gyermek 
+\textit{Divide and Conquer} módszert alkalmazva próbálja megszerezni az eredmény. Ehhez a problémát
+felosztja két részproblémára, majd megpróbál létrehozni egy-egy újabb gyermek folyamatot ezek
+kiértékelésére. Ha nem sikerül új folyamatot indítani, a program áttér egy naiv rekurzív, de szekvenciális
+megoldásra. Ha az első folyamat eredményéből látszik, hogy a feladat megoldható, akkor a gyermek nem várja
+be a második folyamat eredményét.
+\\
+Mind a két gyermek bevárása után a részfeladat eredménye mindenképp ismert lesz. Ilyenkor a futó gyermekfolyamat
+ezt az eredményt elküldi az eredményt a szülőnek, és terminál.
+
+\subsection{Fordítás menete}
+
+A fordítás a tantárgy honlapjáról letöltött \verb|Makefile.aimk| fájl és az \verb|aimk| eszköz
+segítségével történik. A makefile tartalmából kiderül, hogy a kódban használhatjuk a C++11-es
+szabványos elemeket.
+A modulokat úgy jelöljük ki fordításra, hogy hozzáfűzzük a makefile első sorához a nevüket,
+kiterjesztés nélkül.
+
+\subsection{Tesztelés}
+
+A program tesztelése két részből állt, az egyik a megoldás helyességét vizsgálta, a másik
+a kód sebességét.
+
+A helyesség vizsgálatához az alapeseteket teszteltük, illetve a beadandó leírásánál mellékelt
+példabemenetek le lettek futtatva egy-egy helyes és helytelen összeggel.
+
+A sebesség tesztelésére lefuttattam a legnagyobb elemszámú bemenetet az atlaszon különböző mennyiségű PVM-m blade
+hozzáadásával. Az eredmények alább láthatóak.\\[12px]
+
+	\begin{tabular}{l|*{14}{c}}
+		Bladek száma & 0 & 1 & 2 & 4 \\
+		\hline
+		Teszt1 & 0.061 & 0.061 & 0.031 & 0.053 \\
+		\hline
+		Teszt2 & 0.061 & 0.036 & 0.033 & 0.279 \\
+		\hline
+		Teszt3 & 0.072 & 0.063 & 0.357 & 0.139 \\
+	\end{tabular}
+\\[12px]
+
+Amint láthatjuk, a blade-ek száma ebben az esetben nem pozitívan, hanem inkább negatívan befolyásolja a program futásidejét.
+Ez a jelenség két dolognak tulajdonítható. Az egyik az, hogy egy-egy gyermekfolyamat által végzett számítás elenyésző,
+a folyamatok létrehozása és az üzenetek küldése több időt vesz igénybe. A másik az, olyan elemszámokra is párhuzamosan
+történik a kiértékelés, amikre a szekvenciális kiértékelés gyorsabb lenne. Ez a két tényező együtt fokozottan rontja az
+algoritmus teljesítményét. Megoldás lehetne egy adott elemszám alatt átváltani szekvenciális számításra, illetve egy-egy
+gyermekfolyamatnak komplexebb alfeladatot adni.
+
+\end{document}
