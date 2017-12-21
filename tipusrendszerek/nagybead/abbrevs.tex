@@ -1,0 +1,210 @@
+\newcommand{\zero}{\mathsf{zero}}
+\newcommand{\suc}{\mathsf{suc}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Nat}{\mathsf{Nat}}
+\newcommand{\num}{\mathsf{num}}
+\newcommand{\Var}{\mathsf{Var}}
+\newcommand{\List}{\mathsf{List}}
+\newcommand{\isBalanced}{\,\,\mathsf{isBalanced}\,\,}
+\newcommand{\hasHeight}{\,\,\mathsf{hasHeight}\,\,}
+\newcommand{\F}{\mathsf{F}}
+\newcommand{\nat}{\,\,\mathsf{nat}}
+\newcommand{\is}{\,\,\mathsf{is}\,\,}
+
+\newcommand{\leaf}{\mathsf{leaf}}
+\newcommand{\node}{\mathsf{node}}
+\newcommand{\fa}{\text{ fa}}
+\newcommand{\Tree}{\mathsf{Tree}}
+\newcommand{\BTree}{\mathsf{BTree}}
+\newcommand{\Exp}{\mathsf{Exp}}
+
+\renewcommand{\P}{\mathcal{P}}
+\newcommand{\Q}{\mathcal{Q}}
+\newcommand{\LET}{\mathsf{let}\,}
+\newcommand{\BE}{\,\mathsf{be}\,}
+\newcommand{\IN}{\,\mathsf{in}\,}
+\newcommand{\blank}{\mathord{\hspace{1pt}\text{--}\hspace{1pt}}} %from the book
+\newcommand{\Ty}{\mathsf{Ty}}
+\renewcommand{\int}{\mathsf{int}}
+\newcommand{\str}{\mathsf{str}}
+\newcommand{\Z}{\mathbb{Z}}
+\def\drawplusplus#1#2#3{\hbox to 0pt{\hbox to #1{\hfill\vrule height #3 depth
+      0pt width #2\hfill\vrule height #3 depth 0pt width #2\hfill
+      }}\vbox to #3{\vfill\hrule height #2 depth 0pt width
+      #1 \vfill}}
+      %Poor man's typography
+\def\concat{\mathrel{\drawplusplus {12pt}{0.4pt}{5pt}}}
+\newcommand{\String}{\mathsf{String}}
+\newcommand{\Con}{\mathsf{Con}}
+\newcommand{\dom}{\mathit{dom}}
+\newcommand{\wf}{\,\mathsf{wf}}
+\newcommand{\lt}{\longmapsto}
+\newcommand{\val}{\,\mathsf{val}}
+\newcommand{\err}{\,\mathsf{err}}
+\newcommand{\error}{\mathsf{error}}
+\newcommand{\BTy}{\mathsf{BTy}}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\fun}{\mathsf{fun}}
+\newcommand{\app}{\mathsf{app}\,}
+\renewcommand{\tt}{\mathsf{tt}}
+\newcommand{\proj}{\mathsf{proj}}
+\newcommand{\hra}{\hookrightarrow}
+\newcommand{\lb}{\langle}
+\newcommand{\rb}{\rangle}
+\newcommand{\abort}{\mathsf{abort}}
+\newcommand{\inj}{\mathsf{inj}}
+\newcommand{\case}{\mathsf{case}}
+\newcommand{\Bool}{\mathsf{Bool}}
+\newcommand{\true}{\mathsf{true}}
+\newcommand{\false}{\mathsf{false}}
+\newcommand{\Opt}{\mathsf{Opt}}
+\newcommand{\Null}{\mathsf{null}}
+\newcommand{\just}{\mathsf{just}}
+\newcommand{\ifnull}{\mathsf{ifnull}}
+\newcommand{\Prop}{\mathsf{Prop}}
+\renewcommand{\t}{\mathsf{t}}
+\newcommand{\f}{\mathsf{f}}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\ifzero}{\mathsf{ifzero\,}}
+\newcommand{\IF}{\mathsf{if}\,}
+\newcommand{\THEN}{\,\mathsf{then}\,}
+\newcommand{\ELSE}{\,\mathsf{else}\,}
+\newcommand{\rec}{\mathsf{rec}}
+\newcommand{\poly}{\,\mathsf{poly}}
+\newcommand{\map}{\mathsf{map}}
+\newcommand{\spos}{\,\mathsf{spos}}
+\newcommand{\type}{\,\mathsf{type}}
+\newcommand{\fold}{\mathsf{fold}}
+\newcommand{\Stream}{\mathsf{Stream}}
+\newcommand{\head}{\mathsf{head}}
+\newcommand{\tail}{\mathsf{tail}}
+\newcommand{\strgen}{\mathsf{strgen}}
+\newcommand{\gen}{\mathsf{gen}}
+\newcommand{\unfold}{\mathsf{unfold}}
+\newcommand{\ind}{\mathsf{ind}}
+\newcommand{\coind}{\mathsf{coind}}
+\newcommand{\dup}{\mathsf{dup}}
+\newcommand{\TCon}{\mathsf{TCon}}
+\newcommand{\Unit}{\mathsf{Unit}}
+\newcommand{\Empty}{\mathsf{Empty}}
+
+%\newcommand{\U}{\mathsf{U}}
+%\newcommand{\El}{\mathsf{El}}
+%\newcommand{\REN}{\mathsf{REN}}
+%\newcommand{\op}{\mathsf{op}}
+%\newcommand{\Set}{\mathsf{Set}}
+%\newcommand{\PSh}{\mathsf{PSh}}
+%\newcommand{\FamPSh}{\mathsf{FamPSh}}
+\renewcommand{\ll}{\llbracket}
+\newcommand{\rr}{\rrbracket}
+%\newcommand{\Con}{\mathsf{Con}}
+%\newcommand{\Ty}{\mathsf{Ty}}
+\newcommand{\Tm}{\mathsf{Tm}}
+\newcommand{\isZero}{\mathsf{isZero}}
+%\newcommand{\Tms}{\mathsf{Tms}}
+%\newcommand{\R}{\mathsf{R}}
+%\newcommand{\TM}{\mathsf{TM}}
+%\newcommand{\NE}{\mathsf{NE}}
+%\newcommand{\NF}{\mathsf{NF}}
+%\newcommand{\p}{\mathsf{p}}
+%\newcommand{\q}{\mathsf{q}}
+%\renewcommand{\u}{\mathsf{u}}
+%\renewcommand{\ne}{\mathsf{ne}}
+%\newcommand{\nf}{\mathsf{nf}}
+%\newcommand{\lQ}{\mathsf{lQ}}
+%\newcommand{\lU}{\mathsf{lU}}
+%\renewcommand{\lq}{\mathsf{lq}}
+%\newcommand{\lu}{\mathsf{lu}}
+\newcommand{\cul}{\ulcorner}
+\newcommand{\cur}{\urcorner}
+%\newcommand{\norm}{\mathsf{norm}}
+%\newcommand{\Nf}{\mathsf{Nf}}
+%\newcommand{\Ne}{\mathsf{Ne}}
+%\newcommand{\Nfs}{\mathsf{Nfs}}
+%\newcommand{\Nes}{\mathsf{Nes}}
+%\newcommand{\ID}{\mathsf{ID}}
+%\newcommand{\id}{\mathsf{id}}
+%\newcommand{\nat}{\,\dot{\rightarrow}\,}
+%%\newcommand{\nat}{\overset{\mathsf{n}}{\ra}} % this is how we denote it in the formalisation
+%\newcommand{\Nat}{\overset{\mathsf{N}}{\ra}}
+%\renewcommand{\S}{\overset{\mathsf{s}}{\ra}} % we have it with uppercase S in the formalisation
+%\newcommand{\ap}{\mathsf{ap}}
+%%\newcommand{\blank}{\!{-}\!}
+%\newcommand{\lam}{\mathsf{lam}}
+%\newcommand{\app}{\mathsf{app}}
+%\newcommand{\tr}[2]{\ensuremath{{}_{#1 *}\mathopen{}{#2}\mathclose{}}} % from the book
+%\newcommand{\M}{\mathsf{M}}
+%\newcommand{\C}{\mathcal{C}}
+%\newcommand{\data}{\mathsf{data}}
+%\newcommand{\ind}{\hspace{1em}}
+%\newcommand{\idP}{\mathsf{idP}}
+%\newcommand{\compP}{\mathsf{compP}}
+%\newcommand{\idF}{\mathsf{idF}}
+%\newcommand{\compF}{\mathsf{compF}}
+%\newcommand{\ExpPSh}{\mathsf{ExpPSh}}
+%\newcommand{\Var}{\mathsf{Var}}
+%\newcommand{\Vars}{\mathsf{Vars}}
+%\newcommand{\wk}{\mathsf{wk}}
+%\newcommand{\neuU}{\mathsf{neuU}}
+%\newcommand{\neuEl}{\mathsf{neuEl}}
+%\newcommand{\var}{\mathsf{var}}
+%\newcommand{\natn}{\mathsf{natn}}
+%\newcommand{\natS}{\mathsf{natS}}
+%\newcommand{\refl}{\mathsf{refl}}
+%\newcommand{\trans}{\mathbin{\raisebox{0.2ex}{$\displaystyle\centerdot$}}}
+%
+%\newcommand\arcfrombottom{
+%  \begin{tikzpicture}[scale=0.03em]
+%    \draw (0,0) arc (0:180:0.5);
+%    \draw (0,0) edge[->] (0,-0.3);
+%    \draw (-1,0) edge (-1,-0.3);
+%  \end{tikzpicture}
+%}
+%\newcommand\arcfromtop{
+%  \begin{tikzpicture}[scale=0.03em]
+%    \draw (0,0) arc (180:360:0.5);
+%    \draw (0,0) edge[->] (0,0.3);
+%    \draw (1,0) edge (1,0.3);
+%  \end{tikzpicture}
+%}
+
+%\newcommand{\Elim}{\mathsf{Elim}}
+%\newcommand{\record}{\mathsf{record}}
+%\newcommand{\funext}{\mathsf{funext}}
+%\newcommand{\Q}{\mathsf{Q}}
+%\newcommand{\T}{\mathsf{T}}
+%\newcommand{\perm}{\mathsf{perm}}
+%\newcommand{\coe}{\mathsf{coe}}
+%\newcommand{\vz}{\mathsf{vz}}
+%\newcommand{\vs}{\mathsf{vs}}
+%\newcommand{\untr}{\mathsf{untr}}
+%\newcommand{\from}{\mathsf{from}}
+%\newcommand{\fromeq}{{\mathsf{from}\hspace{-0.3em}\equiv}}
+%\newcommand{\fromsimeq}{{\mathsf{from}\hspace{-0.3em}\simeq}}
+%\newcommand{\Model}{\mathsf{Model}}
+%\newcommand{\DModel}{\mathsf{DModel}}
+%\newcommand{\module}{\mathsf{module}}
+%\newcommand{\open}{\mathsf{open}}
+%\renewcommand{\P}{\mathsf{P}}
+%\renewcommand{\not}{\mathsf{not}}
+%\newcommand{\0}{\mathsf{0}}
+%\newcommand{\1}{\mathsf{1}}
+%\renewcommand{\Pr}{\mathsf{Pr}}
+%\newcommand{\PrNat}{\mathsf{PrNat}}
+%\newcommand{\J}{\mathsf{J}}
+%\newcommand{\wkV}{\mathsf{wkV}}
+%\renewcommand{\r}[1]{{\P_{#1}}}
+%\newcommand{\stab}{\mathsf{stab}}
+%\newcommand{\NTy}{\mathsf{NTy}}
+%\newcommand{\isDec}{\mathsf{isDec}}
+%\newcommand{\dec}{\mathsf{dec}}
+%\newcommand{\yes}{\mathsf{yes}}
+%\newcommand{\no}{\mathsf{no}}
+%\newcommand{\K}{\mathsf{K}}
+\newcommand{\fail}{{\normalfont\texttt{fail}}}
+\newcommand{\success}{{\normalfont\texttt{success}}}
+\newcommand{\Infer}{\mathit{infer}}
+\newcommand{\Int}{\mathsf{Int}}
+\newcommand{\con}{\mathsf{con}}
+\newcommand{\des}{\mathsf{des}}
+\newcommand{\Tyvar}{\mathsf{Tyvar}}

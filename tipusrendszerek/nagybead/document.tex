@@ -1,0 +1,78 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\def\magyarOptions{defaults=hu-min}
+\usepackage[magyar]{babel}
+\usepackage{cite}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{proof}
+\usepackage{bbm}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{verbatim}
+\usepackage[shortlabels]{enumitem}
+\usepackage{stmaryrd}
+\usepackage{setspace}
+\usepackage{makeidx}
+
+\numberwithin{equation}{section}
+
+\theoremstyle{magyar}
+\newtheorem{thm}{Tétel}[section]
+\newtheorem{defn}[thm]{Definíció}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{exa}[thm]{Példa}
+\newtheorem{exe}[thm]{Feladat}
+\newtheorem{note}[thm]{Megjegyzés}
+
+\input{abbrevs.tex}
+
+\makeindex
+
+\begin{document}
+
+\onehalfspacing
+
+%=====================================================================
+
+\title{NatFun nyelv operációs szemantikájának determinisztikussága \\ (Nyelvek típusrendszere beadandó)}
+\author{Abonyi-Tóth Ádám \\ atadi96@gmail.com}
+\date{\today}
+\maketitle
+\thispagestyle{empty}
+
+\vspace{25em}
+
+\newpage
+
+A feladat leírása: \href{https://akaposi.github.io/tipusrendszerek/natfun.pdf}{https://akaposi.github.io/tipusrendszerek/natfun.pdf}
+\\ 7. Determinisztikusság
+
+\begin{thm}\label{lem:natbool-opsem-determ}
+	Ha $t \lt t'$ és $t \lt t''$, akkor $t' = t''$.
+\end{thm}
+\begin{proof}
+	$t \lt t'$ levezetése szerinti indukció. 6 esetet írunk ki.
+	\begin{itemize}
+		\item A $(13)$ szabály használata esetén $t = \suc\,t_1$ és
+		      $t' = \suc\,t_2$, ha $t_1 \lt t_2$. Más levezetési szabály baloldalán nem fordul elő a $\suc\,t$, tehát $t''$-re az egyetlen lehetséges levezetés, ha $t''=\suc\,t_3$, ahol $t_1 \lt t_3$. Viszont az indukciós feltevésből tudjuk, hogy $t_2 = t_3$, így $t'=t''$.
+    	\item A $\rec$ átírási szabályai egymást kölcsönösen kizárják, tehát elég lesz a tételt egyenként bizonyítani rájuk. Ezt a következőképpen láthatjuk be: \\
+    	$(15)$ és $(16)$ kizárják egymást, mert $\suc\,t \neq \zero$ minden $t$-re. A $(16)$-os szabály feltételéből és a $(12)$ szabályból következik, hogy a $(16)$-os szabályban $\suc\,t \val$, tehát a 6. tétel alapján nincs olyan $t'$, amire $\suc\,t \lt t'$, így ahol $(14)$ alkalmazható, ott $(16)$ nem alkalmazható, és fordítva. $(11)$ szerint $\zero \val$, tehát a 6. tétel alapján ő sem redukálható, tehát a kölcsönös kizárás $(14)$-gyel megint megvan.
+    	\begin{itemize}
+    		\item $(14)$: $(13)$-hoz hasonlóan látjuk, hogy akkor vezethető le két különböző term, ha $t$ két különböző termre vezethető le, ezt pedig az indukciós feltétel megtiltja.
+    		\item $(15)$: $\rec\,t_0 x.t_1 t_2 \lt t' $ és $\rec\,t_0 x.t_1 t_2 \lt t'' $ esetén látjuk, hogy $t'$ és $t''$ is $\rec\,t_0 x.t_1 t'''$ alakú, ahol $t'''$-ről tudjuk, hogy $t_2 \lt t'''$. Az indukciós feltevés biztosítja, hogy csak egy ilyen $t'''$ létezik, tehát $t' = t''$
+    		\item $(16)$: a levezetés jobboldala egy behelyettesítés, ami determinisztikus, feltéve, hogy minden term, amit a behelyettesítéskor használunk, determinisztikusan levezethető. Ezt az indukciós feltétel biztosítja, tehát az állítás erre az ágra is teljesül.
+    	\end{itemize}
+    	\item Az applikáció átírási szabályainak kölcsönös kizárását az előbbihez hasonlóan láthatjuk be, így elég belátni egyesével az eseteket.
+    	\begin{itemize}
+    		\item $(18)$: $t_1 t_2 \lt t'$ és $t_1 t_2 \lt t''$ esetén látjuk, hogy $t'$ és $t''$ is $t_1' t_2$ alakú, ahol $t_1 \lt t_1'$. Itt az indukciós feltételből tudjuk, hogy csak egy ilyen $t_1'$ van, tehát $t' = t''$.
+    		\item $(19)$: $t_1 t_2 \lt t'$ és $t_1 t_2 \lt t''$ esetén látjuk, hogy $t'$ és $t''$ is $t_1 t_2'$ alakú, ahol $t_2 \lt t_2'$. Itt az indukciós feltételből tudjuk, hogy csak egy ilyen $t_2'$ van, $t_1$ pedig nem írható át, tehát $t' = t''$.
+    	\end{itemize}
+    \end{itemize}
+\end{proof}
+
+\end{document}
