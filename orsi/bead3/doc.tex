@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+
+%margó méretek
+\usepackage[a4paper,
+inner = 25mm,
+outer = 25mm,
+top = 25mm,
+bottom = 25mm]{geometry}
+
+
+%packagek, ha használni akarunk valamit menet közben
+\usepackage{lmodern}
+\usepackage[magyar]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{setspace}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{setspace}
+\usepackage{spverbatim}
+\usepackage[normalem]{ulem}
+
+\setstretch{1.2}
+\begin{document}
+	
+	
+
+% a címlap, túl sokat nem kell módosítani rajta, leszámítva a neved/neptunodat (dátumot)
+\begin{titlepage}
+	\vspace*{0cm}
+	\centering
+	\begin{tabular}{cp{1cm}c}
+		\begin{minipage}{4cm}
+			\vspace{0pt}
+			\includegraphics[width=1\textwidth]{elte_cimer}
+		\end{minipage} & &
+		\begin{minipage}{7cm}
+			\vspace{0pt}Eötvös Loránd Tudományegyetem \vspace{10pt} \newline
+			Informatikai Kar \vspace{10pt} \newline
+			Programozási Nyelvek és Fordítóprogramok Tanszék
+		\end{minipage}
+	\end{tabular}
+	
+	\vspace*{0.2cm}
+	\rule{\textwidth}{1pt}
+	
+	\vspace*{3cm}
+	{\Huge Osztott rendszerek specifikációja és implementációja }
+	
+	\vspace*{0.5cm}
+	{\normalsize IP-08bORSIG}
+	
+	\vspace{2cm}
+	{\huge Dokumentáció a 3. beadandóhoz}
+	
+	\vspace*{5cm}
+	
+	{\large \verb|Abonyi-Tóth Ádám| } % (név)
+	
+	{\large \verb|DKC31P| }  % (neptun)
+		
+	
+	\vfill
+	
+	\vspace*{1cm}
+	2017. december 29. % (dátum)
+\end{titlepage}
+
+\section{Kitűzött feladat}
+
+Egy előre megadott fájlban képek szöveges reprezentációját találhatjuk (pixelenként RGB módon). \\
+\\
+A program parancssori paraméterként kapja meg az alábbiakat:
+\begin{itemize}
+	\item A képek átméretezési arányát \%-ban. (pl. 50 - ekkor 50\%-ra, azaz felére kell csökkenteni az összes képet. 25 esetén negyed-méretet kapnánk, etc.)
+	\item Annak a fájlnak a neve, a képek primitív leírását tartalmazza. (pl. \\ \verb|'pictures.txt'|)
+	\item A kimeneti fájl neve (pl. \verb|'picross.quiz'|)
+\end{itemize}
+Egy képen végrehajtandó transzformáció a következő lépések kompozíciójával áll elő:
+\begin{itemize}
+	\item A fájlból (első param.) beolvasott képeket először a megadott arányban át kell méretezni.
+	\item Ezek után az így kapott kisebb képek színeit kell leképezni az előre megadott 8 szín valamelyikére.
+	\item Ezt követően az így kapott ábrákban minden sorra és oszlopra ki kell számolni, hogy egymás után hány azonos színű pixelt láthatunk (de nem szimplán azt, hogy az adott sorban/oszlopban hány különböző szín található).
+\end{itemize}
+
+A kapott eredményeket (a méretezett és megfelelő színre konvertált képeket és a hozzájuk tartozó címkéket) írjuk ki a kimeneti fájlba (3-ik paraméter)!
+
+\section{Felhasználói dokumentáció}
+
+\subsection{Rendszer-követelmények, telepítés}
+
+A program futtatásához szükséges a PVM rendszer megléte. Telepítéséhez a négy bináris
+állomány, a \textit{master}, \textit{first}, \textit{second} és a \textit{third} megfelelő helyen való elhelyezése szükséges.
+
+\subsection{A program használata}
+
+A program futtatásához előbb lépjünk be PVM-be, és inicializáljuk tetszés szerint a blade-eket.
+Az indítás a PVM-en belül a következő paranccsal történik:
+\\
+\verb|spawn -> master rate input.txt output.txt|,
+\\
+ahol \verb|rate| az átméretezés mértéke százalékban, \verb|input.txt| a bemeneti fájl neve, \verb|output.txt| pedig
+a kimeneti fájl neve a felhasználó könyvtárához képest.
+\\
+Figyeljünk az inputfájlban található adatok helyességére és megfelelő tagolására, mivel
+az alkalmazás külön ellenőrzést nem végez erre vonatkozóan. Futás után a paraméterben megadott
+fájl tartalmazza a kapott eredményt.
+
+\section{Fejlesztői dokumentáció}
+
+\subsection{Megoldási mód}
+
+A programot az \textit{adatcsatorna tételére} vezetjük vissza.
+A kódot logikailag három egységre osztjuk:
+\begin{itemize}
+	\item \textit{Főfolyamat:} A szülőfolyamat feladata a bemenet és a kimenet kezelése és az adatcsatorna felállítása.
+	\item \textit{Gyermekfolyamatok:} A 3 gyermek feladata az egyes függvénykomponensek ($ f_1 $, $ f_2 $ és $ f_3 $) végrehajtása.
+			\sout{És hogy megvédjék a Földet az Angyalok támadásaitól és a Third Impact-től.}
+	\item \textit{Model:} A \verb|pvm_utils.hpp|, \verb|image.hpp| és \verb|resize.hpp| fájlok szerepe a folyamatok közös típusainak és segédfüggvények különválasztása a tesztelhetőség és a karbantarthatóság érdekében.
+\end{itemize}
+
+\subsection{Implementáció}
+
+A feladat alapvető típusai az \verb|Image| (RGB kép reprezentációja), a \verb|Image3bit| (3 bites kép ábrázolása),
+és a \verb|ColorTag = std::vector<std::vector<int>>| (a címkék reprezentációja). \\
+\\
+A \verb|master.cpp| fájlban van a főprogram megvalósítása. A \verb|main| függvény beolvassa a bemeneti fájlból a képeket,
+majd a PVM segítségével létrehoz 3 gyermeket, és elküldi nekik az adatcsatorna létrehozásához szükséges információkat.
+Ezután amíg van adat, fogadja a megoldásokat a harmadik gyermektől. \\
+\\
+A gyermekek egy általános sémát követnek, amit a \verb|pvm_utils::ChannelChild| típusban rögzítünk. Ez az osztály biztosítja azt a működést,
+hogy ha adott egy függvényt, akkor amíg a csatornán van adat, addig leveszi a bemenetet a csatornáról, alkalmazza rá a függvényt, és
+továbbítja az eredményt a következő csatornán. Ezt az osztályt használva az egyes gyermekeknél elég megadni magát az $ f_i $ függvényt. \\
+\\
+Az \verb|first| feladata az átméretezés, bemenete az arány és a forráskép \\ (\verb|std::tuple<int,Image>|), kimenete pedig a lekicsinyített kép (\verb|Image|). A megvalósítás \textit{Divide \& Conquer} stratégiát használ, ahol a kép részeit (\verb|ImgPart|) vagy további négy részre osztjuk (\verb|slicing::slice|), elvégezzük új szálon a számításokat, és egyesítjük őket (\verb|slicing::combine|), vagy ha elég kicsik, akkor kiszámoljuk az eredeti kép alapján a megfelelő pixel értékeket. \\
+\\
+A \verb|second| feladata a színek (\verb|Color|) konvertálása 3 bites tartományba (\verb|Color3bit|), így a bemeneti \verb|Image|-et \textit{Task farm} stratégiával soronként átalakítva visszaadja az \verb|Image3bit| eredményt. \\
+\\
+A \verb|third| gyermek a hárombites képre előállítja a címkéket (\verb|ColorTag|). Ez soronként és oszloponként szintén \textit{Task farm} segítségével történik. Amíg a task farm részfeladatai számolnak, a főfolyamat visszaalakítja a hárombites képet \verb|Image| típusúra.
+
+\subsection{Fordítás menete}
+
+A fordítás a tantárgy honlapjáról letöltött \verb|Makefile.aimk| fájl és az \verb|aimk| eszköz
+segítségével történik. A makefile tartalmából kiderül, hogy a kódban használhatjuk a C++11-es
+szabványos elemeket.
+A modulokat úgy jelöljük ki fordításra, hogy hozzáfűzzük a makefile első sorához a nevüket,
+kiterjesztés nélkül.
+
+\subsection{Tesztelés}
+
+A program helyességének tesztelése szekvenciális módon történt, lokálisan. Ezt főként az tette lehetővé, hogy minden PVM-specifikus kód a \verb|pvm_utils| névtérben van elkülönítve, és független a többi egység működésétől, így PVM-et nélkülöző rendszerben is tesztelhető volt az alkalmazás. \\
+\\
+Ezt követte a kommunikáció tesztelése az Atlaszon, ahol a program szintén helyesen működött a példabemenetekre. \\
+\\
+Beláthatjuk, hogy a pvm rendszerben háromnál több blade használata már nem fogja tovább gyorsítani a futtatást, mivel pvm-es gyermek csak 3 van, 3 aktív blade-nél viszont kell ahhoz, hogy mindegyik gyermek a lehető legtöbb erőforráshoz jusson. 
+
+
+\end{document}
