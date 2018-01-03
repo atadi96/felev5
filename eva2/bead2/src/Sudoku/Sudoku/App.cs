@@ -24,13 +24,13 @@ namespace Lopakodo
             _mapsPage = new MapsPage();
             _mapsViewModel = new MapsViewModel(_mapRepo);
             _mapsViewModel.MapSelected +=
-                /*async*/ (object o, IMapID mapID) =>
+                async (object o, IMapID mapID) =>
                 {
-                    /*var map = await Task.Run<Map<FieldType>>(() =>
+                    var map = await Task.Run<Map<FieldType>>(() =>
                     {
                         return _mapRepo.LoadMap(mapID);
-                    });*/
-                    var map = _mapRepo.LoadMap(mapID);
+                    });
+                    //var map = _mapRepo.LoadMap(mapID);
                     _gameView = new GameView();
                     var gameVM = new GameViewModel(map, mapID.Name);
                     _gameRunning = gameVM.Running;
@@ -41,12 +41,17 @@ namespace Lopakodo
                             bool running = ((GameViewModel)oo).Running;
                             if (running && !_gameRunning)
                             {
-                                Device.StartTimer(TimeSpan.FromSeconds(2), () =>
+                                _gameRunning = running;
+                                Device.StartTimer(TimeSpan.FromSeconds(1), () =>
                                 {
                                     //_gameView.DisplayAlert("k", "k", "k");
                                     gameVM.UpdateGame();
                                     return _gameRunning;
                                 });
+                            }
+                            else
+                            {
+                                _gameRunning = running;
                             }
                         }
                     };
@@ -55,13 +60,13 @@ namespace Lopakodo
                         await _gameView.DisplayAlert("Game Result", status == GameState.GameStatus.Won ? "You win!" : "You lose!", "OK");
                     };
                     _gameView.BindingContext = gameVM;
-                    Device.StartTimer(TimeSpan.FromSeconds(2), () =>
+                    Device.StartTimer(TimeSpan.FromSeconds(1), () =>
                     {
                         //_gameView.DisplayAlert("k", "k", "k");
                         gameVM.UpdateGame();
                         return _gameRunning;
                     });
-                    /*await*/ _navigation.PushAsync(_gameView);
+                    await _navigation.PushAsync(_gameView);
                 };
             _mapsPage.BindingContext = _mapsViewModel;
             
